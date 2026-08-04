@@ -1,1 +1,924 @@
+�<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag Car | Centro Automotivo e Mecânica Geral</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons Core -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-red': '#E51D1D',
+                        'brand-red-hover': '#B31212',
+                        'dark-bg': '#0a0a0a',
+                        'dark-card': '#141414',
+                        'dark-border': '#262626',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF0000;
+        }
+
+        /* New Animations */
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .anim-float {
+            animation: floatY 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        .anim-glow {
+            animation: pulseGlow 3s infinite;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px);
+        }
+
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes slideRightFade {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateX(-40px);
+        }
+
+        .reveal-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Hero text intro */
+        .hero-text-intro {
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-delay-1 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .hero-delay-2 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .hero-delay-3 {
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .anim-marquee {
+            animation: marquee 20s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .anim-marquee {
+                animation: none;
+            }
+        }
+
+    
+        /* Animações 3D Flip Card */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .group:hover .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+    </style>
+</head>
+
+<body class="bg-dark-bg text-white font-sans antialiased selection:bg-brand-red selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <a href="#" class="flex items-center group">
+                    <img src="assets/logo.png" alt="Drag Car Logo"
+                        class="h-10 w-auto transition-transform duration-300 group-hover:scale-105">
+                </a>
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#revisao" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Revisão Geral</a>
+                    <a href="#todos-servicos"
+                        class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Todos os
+                        Serviços</a>
+                    <a href="#contact-booking"
+                        class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Contato</a>
+                </nav>
+                <!-- Mobile Hamburger toggler -->
+                <div class="md:hidden flex items-center space-x-3">
+                    <button id="menu-toggle"
+                        class="p-2 text-gray-300 bg-dark-card border border-dark-border rounded-md hover:text-white focus:outline-none">
+                        <i id="menu-icon" data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer menu -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-dark-bg/98 border-b border-dark-border px-4 pt-4 pb-6 space-y-3 shadow-2xl">
+            <nav class="flex flex-col space-y-4">
+                <a href="#revisao" onclick="toggleMobileMenu()" class="text-base font-medium text-gray-300 hover:text-white px-3 py-2">Revisão Geral</a>
+                <a href="#todos-servicos" onclick="toggleMobileMenu()"
+                    class="text-base font-medium text-gray-300 hover:text-white px-3 py-2">Todos os Serviços</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero"
+        class="relative pt-32 pb-24 md:pt-40 md:pb-36 bg-cover bg-center overflow-hidden flex items-center justify-start min-h-[90vh]"
+        style="background-image: linear-gradient(rgba(10, 10, 10, 0.60), rgba(10, 10, 10, 0.80)), url('assets/hero.png');">
+
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-dark-bg to-transparent pointer-events-none">
+        </div>
+
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl md:text-left">
+                <span
+                    class="hero-text-intro inline-flex items-center gap-2 bg-brand-red/20 text-red-400 font-mono text-xs font-bold px-4 py-2 rounded-full border border-brand-red/30 uppercase tracking-widest mb-6">
+                    <i data-lucide="shield-check" class="h-4 w-4"></i>
+                    Seu carro em boas mãos
+                </span>
+
+                <h1
+                    class="hero-text-intro hero-delay-1 text-5xl sm:text-6xl lg:text-7xl font-display font-extrabold tracking-tight text-white leading-tight mb-6">
+                    <span class="text-brand-red">Mecânica Geral</span> para Nacionais e Importados
+                </h1>
+
+                <p
+                    class="hero-text-intro hero-delay-2 text-gray-300 text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl font-light">
+                    Manutenção preventiva e corretiva com tecnologia avançada.
+                    <strong
+                        class="text-white block mt-2 text-xl font-display bg-dark-card/50 p-4 rounded-lg border border-dark-border inline-block">
+                        As melhores condições de pagamento: tudo em até <span class="text-brand-red font-extrabold">10x
+                            no cartão</span>.
+                    </strong>
+                </p>
+
+                <div class="hero-text-intro hero-delay-3 flex flex-col sm:flex-row gap-4 md:justify-start">
+                    <a href="#contact-booking"
+                        class="flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-red-hover text-white px-8 py-4 rounded-md text-base font-extrabold tracking-wider shadow-[0_0_20px_rgba(255,0,0,0.4)] hover:shadow-[0_0_30px_rgba(255,0,0,0.6)] hover:-translate-y-1 transition-all font-display">
+                        AGENDAR REVISÒO
+                        <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FREIOS SECTION -->
+    <!-- REVISÒO GERAL SECTION -->
+    <section id="revisao" class="py-24 bg-dark-bg border-t border-dark-border overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal-up">
+                <div class="inline-flex items-center justify-center p-3 bg-brand-red/10 rounded-xl text-brand-red mb-4 anim-float">
+                    <i data-lucide="shield-check" class="h-8 w-8"></i>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-display font-extrabold tracking-tight mt-2 mb-4">Revisão <span
+                        class="text-brand-red">Completa e Preventiva</span></h2>
+                <p class="text-gray-400 text-lg leading-relaxed">
+                    Cuidamos de cada detalhe do seu veículo para garantir segurança, desempenho e durabilidade. Uma revisão periódica evita problemas maiores e gastos inesperados.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 reveal-up">
+                
+                <!-- Card 1: TROCA DE ÓLEO DO MOTOR -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <!-- FRENTE -->
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="droplet" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Troca de Óleo do Motor</h3>
+                        </div>
+                        <!-- VERSO -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Lubrificantes de alta performance e filtros originais para proteção total do seu motor e melhor eficiência de combustível.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: ARREFECIMENTO -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="thermometer-snowflake" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Arrefecimento</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Limpeza do sistema, troca de fluido e aditivos corretos para evitar superaquecimento e danos no bloco do motor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: TROCA DE ÓLEO DE CÂMBIO AUTOMÁTICO -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="cog" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Troca de Óleo de Câmbio Automático</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Troca 100% via máquina dialisadora, retirando todo o fluido antigo. Previne trancos, patinação e quebra do câmbio.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: FREIOS -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="disc" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Freios</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Revisão de pastilhas, discos, tambores e sangria eletrônica do fluido para frenagens perfeitas e sem ruídos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: SUSPENSÃO -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="move-up-down" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Suspensão</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Troca de amortecedores, molas e buchas. Traz de volta a estabilidade, conforto e dirigibilidade de carro novo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: PNEUS -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="circle-dashed" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Pneus</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Venda, montagem e balanceamento de pneus das melhores marcas, garantindo aderência e segurança máxima.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7: ALINHAMENTO 3D -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="crosshair" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Alinhamento 3D</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Tecnologia milimétrica para ajustar a geometria da suspensão, evitando desgaste irregular dos pneus e volante torto.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8: EMBREAGEM -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="layers" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Embreagem</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Substituição do kit de embreagem completo, eliminando trepidações, pedal duro e dificuldades no engate de marchas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 9: INJEÇÃO ELETRONICA -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="zap" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Injeção Eletrônica</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Diagnóstico via scanner, limpeza de bicos, análise de sensores. Acaba com engasgos, alto consumo e luzes no painel.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 10: REVISÃO GERAL -->
+                <div class="perspective-1000 h-[220px] group cursor-pointer">
+                    <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner shadow-xl rounded-2xl">
+                        <div class="absolute inset-0 backface-hidden bg-dark-card border border-dark-border rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="shield-check" class="h-10 w-10 text-brand-red mb-4"></i>
+                            <h3 class="text-sm font-bold text-white font-display uppercase tracking-wider">Revisão Geral</h3>
+                        </div>
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-brand-red rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-[0_0_20px_rgba(255,0,0,0.3)]">
+                            <h3 class="text-xs font-extrabold text-white font-display uppercase mb-2">Detalhes</h3>
+                            <p class="text-xs text-white/90 font-medium">Um check-up 360° minucioso em todos os pontos cruciais do veículo para garantir total segurança antes de viagens.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-16 text-center reveal-up">
+                <a href="https://wa.me/5548996932062?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20e%20agendar%20meu%20carro." target="_blank" class="inline-flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-red-hover text-white px-8 py-4 rounded-md text-base font-extrabold tracking-wider shadow-[0_0_20px_rgba(255,0,0,0.4)] hover:-translate-y-1 transition-all font-display">
+                    AGENDAR UM SERVIÇO AGORA
+                    <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ALINHAMENTO 3D SPECIAL SECTION -->
+    <section id="alinhamento-3d" class="py-24 relative overflow-hidden bg-black border-t border-dark-border">
+        <!-- Laser Gradients -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/2 left-0 w-full h-[1px] bg-brand-red/30 shadow-[0_0_20px_#E51D1D] animate-red-pulse"></div>
+            <div class="absolute left-1/2 top-0 h-full w-[1px] bg-brand-red/30 shadow-[0_0_20px_#E51D1D] animate-red-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(229,29,29,0.15)_0%,rgba(0,0,0,0)_60%)]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-up">
+                    <div class="inline-flex items-center gap-2 bg-brand-red/10 text-brand-red font-mono text-xs font-bold px-4 py-2 rounded-full border border-brand-red/30 uppercase tracking-widest mb-6">
+                        <i data-lucide="crosshair" class="h-4 w-4"></i>
+                        Tecnologia de Ponta
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-display font-extrabold tracking-tight mb-6 text-white leading-tight">
+                        O Melhor e Mais Eficaz <span class="hero-shine font-display text-brand-red">Alinhamento 3D</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Esqueça o alinhamento tradicional. Na Drag Car, utilizamos tecnologia 3D de última geração que lê a geometria do seu carro com precisão milimétrica. O resultado? Maior durabilidade dos pneus, economia de combustível e uma direção perfeitamente segura.
+                    </p>
+                    <div class="space-y-6 mb-10">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 h-10 w-10 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center shrink-0 text-brand-red shadow-[0_0_15px_rgba(229,29,29,0.2)]">
+                                <i data-lucide="scan-line" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-lg mb-1">Precisão Absoluta</h4>
+                                <p class="text-gray-400 text-sm">Câmeras de alta resolução mapeiam os ângulos exatos das rodas em tempo real, eliminando margens de erro.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 h-10 w-10 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center shrink-0 text-brand-red shadow-[0_0_15px_rgba(229,29,29,0.2)]">
+                                <i data-lucide="trending-up" class="h-5 w-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-lg mb-1">Maior Vida Útil</h4>
+                                <p class="text-gray-400 text-sm">Um carro 100% alinhado não arrasta os pneus. Você economiza na troca de pneus e no consumo de combustível.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/5548996932062?text=Gostaria%20de%20agendar%20um%20Alinhamento%203D!" target="_blank" class="inline-flex items-center gap-2 bg-brand-red hover:bg-brand-red-hover text-white px-8 py-4 rounded-md text-base font-extrabold tracking-wider transition-all hover:-translate-y-1 font-display shadow-[0_0_20px_rgba(255,0,0,0.4)]">
+                        AGENDAR ALINHAMENTO 3D
+                        <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                    </a>
+                </div>
+
+                <div class="reveal-up relative perspective-1000">
+                    <div class="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden border border-brand-red/30 shadow-[0_0_30px_rgba(229,29,29,0.15)] group bg-dark-card flex items-center justify-center">
+                        <!-- Simulated 3D Car Wireframe or graphic representation -->
+                        <div class="absolute inset-0 bg-[url('assets/hero.png')] bg-cover bg-center opacity-30 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        
+                        <!-- Overlay interface elements -->
+                        <div class="absolute top-6 left-6 right-6 flex justify-between items-start">
+                            <div class="bg-black/80 backdrop-blur-sm border border-brand-red/50 text-brand-red text-xs font-mono py-1 px-3 rounded flex items-center gap-2">
+                                <span class="animate-pulse h-2 w-2 bg-brand-red rounded-full"></span> SENSOR ATIVO
+                            </div>
+                            <div class="text-right">
+                                <div class="text-white font-mono text-sm font-bold">CÂMBER: -1.0° <span class="text-green-500">✔</span></div>
+                                <div class="text-white font-mono text-sm font-bold">CÁSTER: +3.5° <span class="text-green-500">✔</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Targeting Center -->
+                        <div class="relative z-10 flex items-center justify-center">
+                            <div class="w-32 h-32 border border-brand-red/50 rounded-full animate-[spin_10s_linear_infinite] flex items-center justify-center">
+                                <div class="w-24 h-24 border border-dashed border-brand-red/80 rounded-full animate-[spin_8s_linear_infinite_reverse]"></div>
+                            </div>
+                            <i data-lucide="crosshair" class="absolute h-12 w-12 text-brand-red drop-shadow-[0_0_10px_#E51D1D]"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="avaliacoes" class="py-24 bg-dark-bg border-t border-dark-border overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal-up">
+                <div class="flex justify-center gap-2 mb-4">
+                    <i data-lucide="star" class="h-10 w-10 text-yellow-500 fill-yellow-500"></i>
+                    <i data-lucide="star" class="h-10 w-10 text-yellow-500 fill-yellow-500"></i>
+                    <i data-lucide="star" class="h-10 w-10 text-yellow-500 fill-yellow-500"></i>
+                    <i data-lucide="star" class="h-10 w-10 text-yellow-500 fill-yellow-500"></i>
+                    <i data-lucide="star" class="h-10 w-10 text-yellow-500 fill-yellow-500"></i>
+                </div>
+                <h2 class="text-4xl font-display font-extrabold tracking-tight mb-4">O que nossos <span
+                        class="text-brand-red">Clientes</span> dizem</h2>
+                <p class="text-gray-400">Avaliações reais de quem já confiou o seu veículo aos nossos especialistas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-up">
+                <!-- Avaliação 1 -->
+                <div class="bg-dark-card p-8 rounded-2xl border border-dark-border hover:border-brand-red/50 transition-colors flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 mb-4 text-yellow-500">
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6 leading-relaxed text-sm">
+                            "Entrego o meu carro de olhos fechados. Total confiança no Calil e toda a equipe. Eles tem muito conhecimento técnico, paciência para explicar sobre as peças, preço justo e facilidade no pagamento. Clima muito familiar. Indico, principalmente para as mulheres. Você será respeitada e ainda vai sair de lá entendendo um pouco do funcionamento do veículo."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto pt-4 border-t border-dark-border/50">
+                        <div class="h-10 w-10 bg-brand-red/20 rounded-full flex items-center justify-center text-brand-red font-bold">AO</div>
+                        <div>
+                            <strong class="text-white block font-display">Ana Paula Oliveira</strong>
+                            <span class="text-xs text-gray-500">Guia Local do Google</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Avaliação 2 -->
+                <div class="bg-dark-card p-8 rounded-2xl border border-dark-border hover:border-brand-red/50 transition-colors flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 mb-4 text-yellow-500">
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6 leading-relaxed text-sm">
+                            "Recebi uma indicação e fui até o local para buscar resolver o problema na parte do carro que estava funcionando em 3 cilindros. Chegando até o local fui muito bem atendido pelo proprietário Calil e sua equipe, foram muito receptivos e eficientes para achar o problema e resolver. Preço justo e ótimo atendimento. Super indico o local, desejo sucesso para Drag Car."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto pt-4 border-t border-dark-border/50">
+                        <div class="h-10 w-10 bg-brand-red/20 rounded-full flex items-center justify-center text-brand-red font-bold">HB</div>
+                        <div>
+                            <strong class="text-white block font-display">Henrique Bueno</strong>
+                            <span class="text-xs text-gray-500">Guia Local do Google</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Avaliação 3 -->
+                <div class="bg-dark-card p-8 rounded-2xl border border-dark-border hover:border-brand-red/50 transition-colors flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-1 mb-4 text-yellow-500">
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                            <i data-lucide="star" class="h-5 w-5 fill-yellow-500"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6 leading-relaxed text-sm">
+                            "Fui muito bem atendido pela equipe ao levar o carro da minha esposa. Fui atrás para fazer uma cambagem que me foi recomendado em outro lugar, chegando lá resolveram meu problema que nem era isso, foi mau feito em outra oficina, senti confiança e realmente sai muito satisfeito com o serviço e atendimento, o proprietário Calil mto solicito! Com certeza irei voltar e indicar..."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto pt-4 border-t border-dark-border/50">
+                        <div class="h-10 w-10 bg-brand-red/20 rounded-full flex items-center justify-center text-brand-red font-bold">GR</div>
+                        <div>
+                            <strong class="text-white block font-display">Gusttavo Rodrigues</strong>
+                            <span class="text-xs text-gray-500">Cliente via Google</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTAGRAM VIDEOS SECTION -->
+    <section id="instagram" class="py-24 bg-dark-bg border-t border-dark-border overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal-up">
+                <i data-lucide="instagram" class="h-10 w-10 text-brand-red mx-auto mb-4"></i>
+                <h2 class="text-4xl font-display font-extrabold tracking-tight mb-4">Confira nosso <span
+                        class="text-brand-red">Trabalho no Instagram</span></h2>
+                <p class="text-gray-400">Acompanhe o dia a dia da nossa oficina e a transparência dos nossos serviços em vídeos reais.</p>
+            </div>
+
+            <div class="space-y-20">
+                <!-- Video 1: Alinhamento 3D (Video on Left, Text on Right) -->
+                <div class="flex flex-col md:flex-row items-center gap-12 reveal-up">
+                    <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                        <div class="aspect-[9/16] w-full max-w-[320px] bg-dark-card border border-dark-border rounded-2xl overflow-hidden relative shadow-2xl hover:border-brand-red/50 transition-all">
+                            <iframe src="https://www.instagram.com/reel/DVJMcY8jW-4/embed" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true" class="absolute inset-0 w-full h-full"></iframe>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
+                        <div class="inline-flex items-center justify-center p-3 bg-brand-red/10 rounded-xl text-brand-red mb-2">
+                            <i data-lucide="crosshair" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="text-3xl font-display font-bold text-white">Alinhamento 3D</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Neste vídeo, mostramos como funciona o nosso serviço de alinhamento 3D. Precisão milimétrica para garantir que o seu carro rode sempre reto, economizando pneus e trazendo segurança.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Video 2: Revisão (Text on Left, Video on Right) -->
+                <div class="flex flex-col md:flex-row-reverse items-center gap-12 reveal-up">
+                    <div class="w-full md:w-1/2 flex justify-center md:justify-start">
+                        <div class="aspect-[9/16] w-full max-w-[320px] bg-dark-card border border-dark-border rounded-2xl overflow-hidden relative shadow-2xl hover:border-brand-red/50 transition-all">
+                            <iframe src="https://www.instagram.com/reel/DN3BUUm2hVu/embed" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true" class="absolute inset-0 w-full h-full"></iframe>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-4 text-center md:text-right">
+                        <div class="inline-flex items-center justify-center p-3 bg-brand-red/10 rounded-xl text-brand-red mb-2">
+                            <i data-lucide="wrench" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="text-3xl font-display font-bold text-white">A Importância da Revisão</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            O cliente trouxe o carro apenas para consertar um vazamento de água, mas ao revisarmos tudo, descobrimos que a correia dentada estava quase estourando. Uma revisão preventiva e bem feita previne prejuízos enormes no motor!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Video 3: Sistema de Freios (Video on Left, Text on Right) -->
+                <div class="flex flex-col md:flex-row items-center gap-12 reveal-up">
+                    <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                        <div class="aspect-[9/16] w-full max-w-[320px] bg-dark-card border border-dark-border rounded-2xl overflow-hidden relative shadow-2xl hover:border-brand-red/50 transition-all">
+                            <iframe src="https://www.instagram.com/reel/DLCfeWeSLkb/embed" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true" class="absolute inset-0 w-full h-full"></iframe>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
+                        <div class="inline-flex items-center justify-center p-3 bg-brand-red/10 rounded-xl text-brand-red mb-2">
+                            <i data-lucide="disc" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="text-3xl font-display font-bold text-white">Revisão Completa de Freios</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Neste vídeo acompanhamos uma manutenção rigorosa no sistema de freios. Mostramos na prática como trabalhamos para devolver a máxima eficiência de frenagem e segurança ao veículo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRANDS CAROUSEL -->
+    <section id="brands" class="py-16 bg-dark-card border-t border-b border-dark-border overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal-up mb-8">
+            <div class="text-center">
+                <span class="text-brand-red font-semibold font-mono tracking-wider uppercase text-xs">Qualidade
+                    Garantida</span>
+                <h3 class="text-2xl font-display font-bold mt-2">Trabalhamos com as <span
+                        class="text-brand-red">Melhores Marcas</span></h3>
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden w-full flex items-center h-24">
+            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-dark-card to-transparent z-10"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-dark-card to-transparent z-10"></div>
+
+            <div
+                class="flex anim-marquee gap-16 min-w-[200%] items-center opacity-70 hover:opacity-100 transition-opacity duration-500">
+                <img src="logos/COFAP.jpg" alt="Cofap"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Castrol_logo_2023.svg.png" alt="Castrol"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/LOGO_LUBRAX.avif" alt="Lubrax"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MAHLE.jpg" alt="Mahle"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MANNOL_Logo.png" alt="Mannol"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MONROE.jpg" alt="Monroe"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MOPAR.jpg" alt="Mopar"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Mobil_logo.svg.png" alt="Mobil"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/NGK.jpg" alt="NGK"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Petronas_logo.svg.png" alt="Petronas"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/SABÓ.jpg" alt="Sabó"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/TRW.jpg" alt="TRW"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/lube-gard.png" alt="Lube-gard"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+
+                <!-- Duplicate for seamless scroll -->
+                <img src="logos/COFAP.jpg" alt="Cofap"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Castrol_logo_2023.svg.png" alt="Castrol"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/LOGO_LUBRAX.avif" alt="Lubrax"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MAHLE.jpg" alt="Mahle"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MANNOL_Logo.png" alt="Mannol"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MONROE.jpg" alt="Monroe"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/MOPAR.jpg" alt="Mopar"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Mobil_logo.svg.png" alt="Mobil"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/NGK.jpg" alt="NGK"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/Petronas_logo.svg.png" alt="Petronas"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/SABÓ.jpg" alt="Sabó"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/TRW.jpg" alt="TRW"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+                <img src="logos/lube-gard.png" alt="Lube-gard"
+                    class="h-16 w-32 object-contain grayscale hover:grayscale-0 transition-all rounded-lg bg-white/10 p-2">
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMULARIO DE AGENDAMENTO -->
+    <section id="contact-booking" class="py-24 bg-dark-card border-t border-b border-dark-border overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-dark-bg border border-brand-red/30 p-8 sm:p-12 rounded-3xl shadow-2xl relative reveal-up">
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <i data-lucide="credit-card" class="w-32 h-32 text-brand-red"></i>
+                </div>
+
+                <div class="text-center mb-10 relative z-10">
+                    <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-white mb-4">Agende seu atendimento
+                    </h2>
+                    <p class="text-gray-400">Preencha os dados e entraremos em contato via WhatsApp para confirmar.</p>
+                    <div
+                        class="mt-4 inline-flex items-center gap-2 bg-brand-red/10 border border-brand-red/20 px-4 py-2 rounded-lg">
+                        <i data-lucide="check-circle" class="h-5 w-5 text-brand-red"></i>
+                        <span class="text-sm font-bold text-white">Lembrando: Parcelamos tudo em até 10x sem
+                            juros!</span>
+                    </div>
+                </div>
+
+                <form onsubmit="handlePreBooking(event)" class="space-y-6 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Seu
+                                Nome *</label>
+                            <input type="text" id="form-name" required placeholder="Ex: Rodrigo"
+                                class="w-full bg-dark-card border border-dark-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-red transition-all">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">WhatsApp
+                                *</label>
+                            <input type="tel" id="form-phone" required placeholder="Ex: (48) 9999-9999"
+                                class="w-full bg-dark-card border border-dark-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-red transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Veículo
+                                *</label>
+                            <input type="text" id="form-car" required placeholder="Ex: VW Polo"
+                                class="w-full bg-dark-card border border-dark-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-red transition-all">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Serviço
+                                de Interesse</label>
+                            <select id="form-service"
+                                class="w-full bg-dark-card border border-dark-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-red transition-all appearance-none">
+                                <option value="Freios">Manutenção de Freios</option>
+                                <option value="Suspensão e Alinhamento">Suspensão / Alinhamento</option>
+                                <option value="Troca de �leo">Troca de �leo de Motor</option>
+                                <option value="Mecânica Geral">Mecânica Geral / Não sei o problema</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-brand-red hover:bg-brand-red-hover text-white font-display font-extrabold py-4 px-6 rounded-lg text-sm tracking-widest uppercase transition-all shadow-lg flex items-center justify-center gap-2 mt-4 hover:scale-[1.02]">
+                        ENVIAR PELO WHATSAPP
+                        <i data-lucide="send" class="h-4 w-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark-bg py-12 text-gray-500 text-xs text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-4">
+            <img src="assets/logo.png" alt="Drag Car Logo"
+                class="h-8 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all">
+            <p class="mb-2">© 2026 Drag Car - Centro Automotivo e Mecânica Geral. Todos os direitos reservados.</p>
+            <p class="text-xs text-gray-500 mt-2">
+                Desenvolvido por <a href="https://wa.me/5548992233575?text=Ol%C3%A1%2C%20estava%20em%20um%20site%20parceiro%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="text-brand-red hover:text-brand-red-hover font-semibold transition-colors">Maré Flow</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- FLOAT WHATSAPP BOX BUTTON -->
+    <a href="https://wa.me/5548996932062?text=Olá,%20gostaria%20de%20agendar%20um%20serviço." target="_blank"
+        class="fixed bottom-6 right-6 z-50 bg-green-600 hover:bg-green-700 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center anim-float"
+        aria-label="Fale conosco no WhatsApp">
+        <svg class="h-7 w-7 text-white fill-current" viewBox="0 0 24 24">
+            <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.733-1.455L0 24zm6.79-11.767c.186-.312.373-.52.56-.728.188-.208.25-.312.374-.52.125-.208.062-.375-.031-.563l-.701-1.687c-.1-.24-.2-.2-.293-.204h-.293c-.1 0-.271.037-.417.186-.146.15-.562.548-.562 1.332 0 .785.573 1.543.652 1.647.08.104 1.116 1.705 2.721 2.399.38.163.678.261.91.335.383.121.731.104 1.006.063.307-.046.942-.385 1.077-.758.136-.375.136-.697.095-.758-.04-.062-.146-.104-.307-.186l-1.859-.916c-.146-.073-.255-.104-.365.063l-.802 1.002c-.104.135-.208.156-.375.073-1.684-.843-2.613-1.928-3.08-2.736z" />
+        </svg>
+    </a>
+
+    <!-- CUSTOM INTERACTIVITY JAVASCRIPT -->
+    <script>
+        lucide.createIcons();
+
+        // Header Scrolling Dynamic styler
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 30) {
+                header.classList.remove('bg-transparent', 'py-5');
+                header.classList.add('bg-dark-bg/90', 'backdrop-blur-md', 'border-b', 'border-dark-border', 'py-3', 'shadow-lg');
+            } else {
+                header.classList.add('bg-transparent', 'py-5');
+                header.classList.remove('bg-dark-bg/90', 'backdrop-blur-md', 'border-b', 'border-dark-border', 'py-3', 'shadow-lg');
+            }
+        });
+
+        // Toggle Mobile Menu drawer
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const menuToggleBtn = document.getElementById('menu-toggle');
+
+        menuToggleBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.setAttribute('data-lucide', 'x');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        });
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            menuIcon.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+        }
+
+        // Formulário de Agendamento
+        function handlePreBooking(event) {
+            event.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const phone = document.getElementById('form-phone').value;
+            const car = document.getElementById('form-car').value;
+            const service = document.getElementById('form-service').value;
+
+            let msg = `Olá DRAG CAR! Gostaria de agendar um atendimento:\n\n`;
+            msg += `�x� *Nome:* ${name}\n`;
+            msg += `�x~ *Contato:* ${phone}\n`;
+            msg += `�xa *Veículo:* ${car}\n`;
+            msg += `�x� *Interesse:* ${service}\n\n`;
+            msg += `Fiquei sabendo que parcelam em até 10x, podemos agendar?`;
+
+            window.open(`https://wa.me/5548996932062?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Intersection Observer for scroll animations
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        document.querySelectorAll('.reveal-up, .reveal-right').forEach(el => {
+            revealObserver.observe(el);
+        });
+    </script>
+</body>
+
+</html>
