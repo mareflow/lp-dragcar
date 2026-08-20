@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+
+  --color-brand-red: #E51D1D;
+  --color-brand-red-hover: #B31212;
+  --color-dark-bg: #0a0a0a;
+  --color-dark-card: #141414;
+  --color-dark-border: #262626;
+}
