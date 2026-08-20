@@ -1,0 +1,9 @@
+# Forçar UTF-8 em todos os arquivos
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js .svg .json
+
+# Otimização de Cache e tipos MIME
+<IfModule mod_mime.c>
+    AddType text/html;charset=utf-8 .html
+    AddType image/webp .webp
+</IfModule>
